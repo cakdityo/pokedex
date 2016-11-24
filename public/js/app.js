@@ -14,16 +14,24 @@ webpackJsonp([0],{
 	    browserHistory = _require.browserHistory,
 	    IndexRoute = _require.IndexRoute;
 
+	var _require2 = __webpack_require__(235),
+	    Provider = _require2.Provider;
+
+	var store = __webpack_require__(291)({ pokemons: ['Bulbasaur', 'Pikachu'] });
 	var AppRoot = __webpack_require__(233);
 	var PokemonList = __webpack_require__(234);
 
 	ReactDOM.render(React.createElement(
-	    Router,
-	    { history: browserHistory },
+	    Provider,
+	    { store: store },
 	    React.createElement(
-	        Route,
-	        { path: '/', component: AppRoot },
-	        React.createElement(IndexRoute, { component: PokemonList })
+	        Router,
+	        { history: browserHistory },
+	        React.createElement(
+	            Route,
+	            { path: '/', component: AppRoot },
+	            React.createElement(IndexRoute, { component: PokemonList })
+	        )
 	    )
 	), document.querySelector('#app'));
 
@@ -91,6 +99,9 @@ webpackJsonp([0],{
 
 	var React = __webpack_require__(1);
 
+	var _require = __webpack_require__(235),
+	    connect = _require.connect;
+
 	var PokemonList = function (_React$Component) {
 	    _inherits(PokemonList, _React$Component);
 
@@ -103,6 +114,19 @@ webpackJsonp([0],{
 	    _createClass(PokemonList, [{
 	        key: 'render',
 	        value: function render() {
+	            var pokemons = this.props.pokemons;
+
+
+	            var renderPokemons = function renderPokemons() {
+	                return pokemons.map(function (pokemon, index) {
+	                    return React.createElement(
+	                        'div',
+	                        { key: index },
+	                        pokemon
+	                    );
+	                });
+	            };
+
 	            return React.createElement(
 	                'div',
 	                null,
@@ -110,7 +134,8 @@ webpackJsonp([0],{
 	                    'h1',
 	                    null,
 	                    'List of Pokemons'
-	                )
+	                ),
+	                renderPokemons()
 	            );
 	        }
 	    }]);
@@ -118,7 +143,64 @@ webpackJsonp([0],{
 	    return PokemonList;
 	}(React.Component);
 
-	module.exports = PokemonList;
+	module.exports = connect(function (state) {
+	    return {
+	        pokemons: state.pokemons
+	    };
+	})(PokemonList);
+
+/***/ },
+
+/***/ 291:
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var redux = __webpack_require__(242);
+	var thunk = __webpack_require__(263).default;
+
+	var _require = __webpack_require__(292),
+	    pokemonsReducer = _require.pokemonsReducer;
+
+	module.exports = function () {
+	    var initialState = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+	    var reducer = redux.combineReducers({
+	        pokemons: pokemonsReducer
+	    });
+
+	    var store = redux.createStore(reducer, initialState,
+	    // Add THUNK middleware for handling asynchronous actions
+	    redux.compose(redux.applyMiddleware(thunk)));
+
+	    return store;
+	};
+
+/***/ },
+
+/***/ 292:
+/***/ function(module, exports) {
+
+	'use strict';
+
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+	module.exports = {
+	    pokemonsReducer: pokemonsReducer
+	};
+
+	function pokemonsReducer() {
+	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+	    var action = arguments[1];
+
+
+	    switch (action.type) {
+	        case 'GET_POKEMONS':
+	            return [].concat(_toConsumableArray(action.pokemons));
+	        default:
+	            return state;
+	    }
+	}
 
 /***/ }
 
