@@ -4,6 +4,8 @@ module.exports = {
     getPokemons: getPokemons
 };
 
+const rootUrl = '/api/pokemons';
+
 function getPokemons(){
     return (dispatch, getState) => {
 

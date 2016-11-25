@@ -232,6 +232,8 @@ webpackJsonp([0],{
 	    getPokemons: getPokemons
 	};
 
+	var rootUrl = '/api/pokemons';
+
 	function getPokemons() {
 	    return function (dispatch, getState) {
 	        var _getState = getState(),
