@@ -637,8 +637,8 @@ webpackJsonp([0],{
 	    }
 
 	    _createClass(PokemonDetail, [{
-	        key: 'componentDidUpdate',
-	        value: function componentDidUpdate() {
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
 	            var _props = this.props,
 	                dispatch = _props.dispatch,
 	                params = _props.params;

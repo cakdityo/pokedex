@@ -5,7 +5,7 @@ var { getPokemonDetail } = require('../actions');
 
 class PokemonDetail extends React.Component {
 
-    componentDidUpdate(){
+    componentDidMount(){
         var { dispatch, params } = this.props;
 
         dispatch(getPokemonDetail(params.pokemonName));
