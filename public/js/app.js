@@ -656,6 +656,8 @@ webpackJsonp([0],{
 	    }, {
 	        key: 'fetchPokemon',
 	        value: function fetchPokemon(pokemonName) {
+	            var dispatch = this.props.dispatch;
+
 	            dispatch(getPokemonDetail(pokemonName));
 	        }
 	    }, {

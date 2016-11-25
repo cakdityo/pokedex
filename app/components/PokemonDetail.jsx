@@ -22,6 +22,7 @@ class PokemonDetail extends React.Component {
     }
 
     fetchPokemon(pokemonName){
+        var { dispatch } = this.props;
         dispatch(getPokemonDetail(pokemonName));
     }
 
