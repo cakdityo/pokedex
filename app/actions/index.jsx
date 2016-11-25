@@ -5,15 +5,18 @@ module.exports = {
 };
 
 function getPokemons(){
-    return (dispatch) => {
-        axios.get('/api/pokemons').then((pokemons) => {
-            console.log(pokemons.data);
-            // dispatch(_setPokemons(pokemons.data));
+    return (dispatch, getState) => {
+
+        var { pokemons } = getState();
+
+        axios.get(`${ rootUrl }?next=${ pokemons.next }`).then((pokemons) => {
+            dispatch(_setPokemons(pokemons.data));
         }, (err) => {
             throw err;
         });
     }
 }
+
 
 // Private actions only called here
 // =========================================================================
