@@ -102,7 +102,7 @@ webpackJsonp([0],{
 	}
 
 	function pokemonDetailReducer() {
-	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : setDefaultPokemonDetail();
 	    var action = arguments[1];
 
 
@@ -112,6 +112,16 @@ webpackJsonp([0],{
 	        default:
 	            return state;
 	    }
+	}
+
+	function setDefaultPokemonDetail() {
+	    return {
+	        name: '',
+	        sprites: {
+	            front_default: '',
+	            back_default: ''
+	        }
+	    };
 	}
 
 /***/ },

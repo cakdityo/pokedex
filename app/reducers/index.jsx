@@ -23,7 +23,7 @@ function pokemonsReducer(state={ pokemons: [], next: 'https://pokeapi.co/api/v2/
 
 }
 
-function pokemonDetailReducer(state={}, action) {
+function pokemonDetailReducer(state=setDefaultPokemonDetail(), action) {
     
     switch(action.type) {
         case 'SET_POKEMON_DETAIL':
@@ -32,4 +32,14 @@ function pokemonDetailReducer(state={}, action) {
             return state;
     }
 
+}
+
+function setDefaultPokemonDetail(){
+    return {
+        name: '',
+        sprites: {
+            front_default: '',
+            back_default: ''
+        }
+    }
 }
