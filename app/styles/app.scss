@@ -1,5 +1,6 @@
 @import '../../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
+
 .navbar-brand {
     letter-spacing: -1px;
     font-weight: bold;
@@ -13,7 +14,7 @@
 #pokemon-list {
     .row {
         overflow-y: scroll;
-        max-height: 600px;
+        max-height: 500px;
     }
 }
 
@@ -26,6 +27,6 @@
 }
 
 .pokemon:hover {
-    border-color: lightgreen;
+    border-color: lightgreen !important;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }

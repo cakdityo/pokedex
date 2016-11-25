@@ -13,7 +13,7 @@
 
 #pokemon-list .row {
   overflow-y: scroll;
-  max-height: 600px; }
+  max-height: 500px; }
 
 .pokemon {
   cursor: pointer;
@@ -23,5 +23,5 @@
   font-size: 1.2em; }
 
 .pokemon:hover {
-  border-color: lightgreen;
+  border-color: lightgreen !important;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); }

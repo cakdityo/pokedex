@@ -1,5 +1,6 @@
 module.exports = {
-    pokemonsReducer: pokemonsReducer
+    pokemonsReducer: pokemonsReducer,
+    pokemonDetailReducer: pokemonDetailReducer
 }
 
 function pokemonsReducer(state={ pokemons: [], next: 'https://pokeapi.co/api/v2/pokemon'}, action) {
@@ -16,6 +17,17 @@ function pokemonsReducer(state={ pokemons: [], next: 'https://pokeapi.co/api/v2/
             return Object.assign({}, state, {
                 next: action.next
             });
+        default:
+            return state;
+    }
+
+}
+
+function pokemonDetailReducer(state={}, action) {
+    
+    switch(action.type) {
+        case 'SET_POKEMON_DETAIL':
+            return Object.assign({}, action.pokemon);
         default:
             return state;
     }

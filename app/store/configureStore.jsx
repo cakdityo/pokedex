@@ -1,11 +1,12 @@
 var redux = require('redux');
 var thunk = require('redux-thunk').default;
 
-var { pokemonsReducer } = require('../reducers');
+var { pokemonsReducer, pokemonDetailReducer } = require('../reducers');
 
 module.exports = function(initialState={}) {
     var reducer = redux.combineReducers({
-        pokemons: pokemonsReducer
+        pokemons: pokemonsReducer,
+        pokemonDetail: pokemonDetailReducer
     });
 
     var store = redux.createStore(

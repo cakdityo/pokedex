@@ -1,7 +1,8 @@
 var axios = require('axios');
 
 module.exports = {
-    getPokemons: getPokemons
+    getPokemons: getPokemons,
+    getPokemonDetail: getPokemonDetail
 };
 
 function getPokemons(){
@@ -14,7 +15,7 @@ function getPokemons(){
             dispatch(_setNextPokemons(newPokemons.data.next));
 
             newPokemons.data.results.forEach((newPokemon) => {
-                axios.get(`/api/pokemon?path=${ newPokemon.url }`).then((pokemon) => {
+                axios.get(`/api/pokemon?name=${ newPokemon.name }`).then((pokemon) => {
 
                     dispatch(_setPokemon(pokemon.data));
 
@@ -24,6 +25,14 @@ function getPokemons(){
             });
         }, (err) => {
             throw err;
+        });
+    }
+}
+
+function getPokemonDetail(name) {
+    return (dispatch) => {
+        axios.get(`/api/pokemon?name=${ name }`).then((pokemon) => {
+            dispatch(_setPokemonDetail(pokemon.data));
         });
     }
 }
@@ -42,5 +51,12 @@ function _setNextPokemons(next) {
     return {
         type: 'SET_NEXT_POKEMONS',
         next
+    }
+}
+
+function _setPokemonDetail(pokemon) {
+    return {
+        type: 'SET_POKEMON_DETAIL',
+        pokemon
     }
 }

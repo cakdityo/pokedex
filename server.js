@@ -20,7 +20,8 @@ app.get('/api/pokemons', (req, res) => {
 });
 
 app.get('/api/pokemon', (req, res) => {
-    axios.get(req.query.path).then((pokemon) => {
+    let url = `https://pokeapi.co/api/v2/pokemon/${ req.query.name }`;
+    axios.get(url).then((pokemon) => {
         res.json(pokemon.data);
     }, (err) => {
         throw err;
