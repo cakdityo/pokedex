@@ -8,12 +8,13 @@ var AppRoot = require('./components/AppRoot');
 var PokemonList = require('./components/PokemonList');
 
 require('./miscellaneous');
+require('./styles/app.scss');
 
 ReactDOM.render(
     <Provider store={ window.store }>
         <Router history={ browserHistory }>
             <Route path="/" component={ AppRoot }>
-                <IndexRoute component={ PokemonList }></IndexRoute>
+
             </Route>
         </Router>
     </Provider>,

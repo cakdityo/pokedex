@@ -1,0 +1,31 @@
+@import '../../node_modules/bootstrap/dist/css/bootstrap.min.css';
+
+.navbar-brand {
+    letter-spacing: -1px;
+    font-weight: bold;
+    font-size: 1.7em;
+}
+
+#pokemon-search {
+    padding: 20px;
+}
+
+#pokemon-list {
+    .row {
+        overflow-y: scroll;
+        max-height: 600px;
+    }
+}
+
+.pokemon {
+    cursor: pointer;
+    text-align: center;
+    letter-spacing: -1px;
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+.pokemon:hover {
+    border-color: lightgreen;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
