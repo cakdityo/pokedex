@@ -633,18 +633,30 @@ webpackJsonp([0],{
 	    function PokemonDetail() {
 	        _classCallCheck(this, PokemonDetail);
 
-	        return _possibleConstructorReturn(this, (PokemonDetail.__proto__ || Object.getPrototypeOf(PokemonDetail)).apply(this, arguments));
+	        var _this = _possibleConstructorReturn(this, (PokemonDetail.__proto__ || Object.getPrototypeOf(PokemonDetail)).call(this));
+
+	        _this.fetchPokemon = _this.fetchPokemon.bind(_this);
+	        return _this;
 	    }
 
 	    _createClass(PokemonDetail, [{
+	        key: 'componentWillReceiveProps',
+	        value: function componentWillReceiveProps(nextProps) {
+	            var params = nextProps.params;
+
+	            this.fetchPokemon(params.pokemonName);
+	        }
+	    }, {
 	        key: 'componentDidMount',
 	        value: function componentDidMount() {
-	            var _props = this.props,
-	                dispatch = _props.dispatch,
-	                params = _props.params;
+	            var params = this.props.params;
 
-
-	            dispatch(getPokemonDetail(params.pokemonName));
+	            this.fetchPokemon(params.pokemonName);
+	        }
+	    }, {
+	        key: 'fetchPokemon',
+	        value: function fetchPokemon(pokemonName) {
+	            dispatch(getPokemonDetail(pokemonName));
 	        }
 	    }, {
 	        key: 'render',

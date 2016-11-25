@@ -5,10 +5,24 @@ var { getPokemonDetail } = require('../actions');
 
 class PokemonDetail extends React.Component {
 
-    componentDidMount(){
-        var { dispatch, params } = this.props;
+    constructor(){
+        super();
 
-        dispatch(getPokemonDetail(params.pokemonName));
+        this.fetchPokemon = this.fetchPokemon.bind(this);
+    }
+
+    componentWillReceiveProps(nextProps){
+        var { params } = nextProps;
+        this.fetchPokemon(params.pokemonName);
+    }
+
+    componentDidMount(){
+        var { params } = this.props;
+        this.fetchPokemon(params.pokemonName);
+    }
+
+    fetchPokemon(pokemonName){
+        dispatch(getPokemonDetail(pokemonName));
     }
 
     render(){
