@@ -282,111 +282,131 @@ webpackJsonp([0],{
 	        key: 'render',
 	        value: function render() {
 	            var pokemons = this.props.pokemons;
-
-	            var fake = [{
-	                name: 'Pikachu',
-	                sprites: {
-	                    front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/106.png'
-	                }
-	            }, {
-	                name: 'Bulbasaur',
-	                sprites: {
-	                    front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png'
-	                }
-	            }, {
-	                name: 'Hitmonlee',
-	                sprites: {
-	                    front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/106.png'
-	                }
-	            }, {
-	                name: 'John Doe',
-	                sprites: {
-	                    front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png'
-	                }
-	            }, {
-	                name: 'Pikachu',
-	                sprites: {
-	                    front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/106.png'
-	                }
-	            }, {
-	                name: 'Bulbasaur',
-	                sprites: {
-	                    front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png'
-	                }
-	            }, {
-	                name: 'Hitmonlee',
-	                sprites: {
-	                    front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/106.png'
-	                }
-	            }, {
-	                name: 'John Doe',
-	                sprites: {
-	                    front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png'
-	                }
-	            }, {
-	                name: 'Pikachu',
-	                sprites: {
-	                    front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/106.png'
-	                }
-	            }, {
-	                name: 'Bulbasaur',
-	                sprites: {
-	                    front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png'
-	                }
-	            }, {
-	                name: 'Hitmonlee',
-	                sprites: {
-	                    front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/106.png'
-	                }
-	            }, {
-	                name: 'John Doe',
-	                sprites: {
-	                    front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png'
-	                }
-	            }, {
-	                name: 'Pikachu',
-	                sprites: {
-	                    front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/106.png'
-	                }
-	            }, {
-	                name: 'Bulbasaur',
-	                sprites: {
-	                    front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png'
-	                }
-	            }, {
-	                name: 'Hitmonlee',
-	                sprites: {
-	                    front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/106.png'
-	                }
-	            }, {
-	                name: 'John Doe',
-	                sprites: {
-	                    front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png'
-	                }
-	            }, {
-	                name: 'Pikachu',
-	                sprites: {
-	                    front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/106.png'
-	                }
-	            }, {
-	                name: 'Bulbasaur',
-	                sprites: {
-	                    front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png'
-	                }
-	            }, {
-	                name: 'Hitmonlee',
-	                sprites: {
-	                    front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/106.png'
-	                }
-	            }, {
-	                name: 'John Doe',
-	                sprites: {
-	                    front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png'
-	                }
-	            }];
+	            // var fake = [
+	            //     {
+	            //         name: 'Pikachu',
+	            //         sprites: {
+	            //             front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/106.png'
+	            //         }
+	            //     },
+	            //     {
+	            //         name: 'Bulbasaur',
+	            //         sprites: {
+	            //             front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png'
+	            //         }
+	            //     },
+	            //     {
+	            //         name: 'Hitmonlee',
+	            //         sprites: {
+	            //             front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/106.png'
+	            //         }
+	            //     },
+	            //     {
+	            //         name: 'John Doe',
+	            //         sprites: {
+	            //             front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png'
+	            //         }
+	            //     },
+	            //     {
+	            //         name: 'Pikachu',
+	            //         sprites: {
+	            //             front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/106.png'
+	            //         }
+	            //     },
+	            //     {
+	            //         name: 'Bulbasaur',
+	            //         sprites: {
+	            //             front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png'
+	            //         }
+	            //     },
+	            //     {
+	            //         name: 'Hitmonlee',
+	            //         sprites: {
+	            //             front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/106.png'
+	            //         }
+	            //     },
+	            //     {
+	            //         name: 'John Doe',
+	            //         sprites: {
+	            //             front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png'
+	            //         }
+	            //     },
+	            //     {
+	            //         name: 'Pikachu',
+	            //         sprites: {
+	            //             front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/106.png'
+	            //         }
+	            //     },
+	            //     {
+	            //         name: 'Bulbasaur',
+	            //         sprites: {
+	            //             front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png'
+	            //         }
+	            //     },
+	            //     {
+	            //         name: 'Hitmonlee',
+	            //         sprites: {
+	            //             front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/106.png'
+	            //         }
+	            //     },
+	            //     {
+	            //         name: 'John Doe',
+	            //         sprites: {
+	            //             front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png'
+	            //         }
+	            //     },
+	            //     {
+	            //         name: 'Pikachu',
+	            //         sprites: {
+	            //             front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/106.png'
+	            //         }
+	            //     },
+	            //     {
+	            //         name: 'Bulbasaur',
+	            //         sprites: {
+	            //             front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png'
+	            //         }
+	            //     },
+	            //     {
+	            //         name: 'Hitmonlee',
+	            //         sprites: {
+	            //             front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/106.png'
+	            //         }
+	            //     },
+	            //     {
+	            //         name: 'John Doe',
+	            //         sprites: {
+	            //             front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png'
+	            //         }
+	            //     },
+	            //     {
+	            //         name: 'Pikachu',
+	            //         sprites: {
+	            //             front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/106.png'
+	            //         }
+	            //     },
+	            //     {
+	            //         name: 'Bulbasaur',
+	            //         sprites: {
+	            //             front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png'
+	            //         }
+	            //     },
+	            //     {
+	            //         name: 'Hitmonlee',
+	            //         sprites: {
+	            //             front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/106.png'
+	            //         }
+	            //     },
+	            //     {
+	            //         name: 'John Doe',
+	            //         sprites: {
+	            //             front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png'
+	            //         }
+	            //     }
+	            // ];
 
 	            var renderPokemons = function renderPokemons() {
-	                return fake.map(function (pokemon, index) {
+	                return pokemons.pokemons.map(function (pokemon, index) {
 	                    return React.createElement(
 	                        'div',
 	                        { key: pokemon.id, className: 'col-sm-3' },
