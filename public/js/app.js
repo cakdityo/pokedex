@@ -17,13 +17,15 @@ webpackJsonp([0],{
 	var _require2 = __webpack_require__(233),
 	    Provider = _require2.Provider;
 
-	var store = __webpack_require__(261)();
+	window.store = __webpack_require__(261)();
 	var AppRoot = __webpack_require__(264);
 	var PokemonList = __webpack_require__(265);
 
+	__webpack_require__(292);
+
 	ReactDOM.render(React.createElement(
 	    Provider,
-	    { store: store },
+	    { store: window.store },
 	    React.createElement(
 	        Router,
 	        { history: browserHistory },
@@ -76,7 +78,7 @@ webpackJsonp([0],{
 	};
 
 	function pokemonsReducer() {
-	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { count: 0, previous: '', results: [], next: '' };
+	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { count: 0, previous: '', results: [], next: 'https://pokeapi.co/api/v2/pokemon' };
 	    var action = arguments[1];
 
 
@@ -84,7 +86,7 @@ webpackJsonp([0],{
 	        case 'SET_POKEMONS':
 	            return Object.assign({}, state, {
 	                previous: action.pokemons.previous,
-	                results: [state.results].concat(_toConsumableArray(action.pokemons.results)),
+	                results: [].concat(_toConsumableArray(state.results), _toConsumableArray(action.pokemons.results)),
 	                next: action.pokemons.next
 	            });
 	        default:
@@ -190,7 +192,7 @@ webpackJsonp([0],{
 	                    return React.createElement(
 	                        'div',
 	                        { key: index },
-	                        pokemon
+	                        JSON.stringify(pokemon)
 	                    );
 	                });
 	            };
@@ -231,10 +233,12 @@ webpackJsonp([0],{
 	};
 
 	function getPokemons() {
-	    return function (dispatch) {
-	        axios.get('/api/pokemons').then(function (pokemons) {
-	            console.log(pokemons.data);
-	            // dispatch(_setPokemons(pokemons.data));
+	    return function (dispatch, getState) {
+	        var _getState = getState(),
+	            pokemons = _getState.pokemons;
+
+	        axios.get(rootUrl + '?next=' + pokemons.next).then(function (pokemons) {
+	            dispatch(_setPokemons(pokemons.data));
 	        }, function (err) {
 	            throw err;
 	        });
@@ -250,6 +254,30 @@ webpackJsonp([0],{
 	        pokemons: pokemons
 	    };
 	}
+
+/***/ },
+
+/***/ 292:
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function($) {'use strict';
+
+	var _require = __webpack_require__(266),
+	    getPokemons = _require.getPokemons;
+
+	// ============ Performing infinite scroll ================
+	// Add event listener for scrolling page
+	// App will fetch another 20 pokemons imediately when user scroll the bottom of the page
+
+	$(document).ready(function () {
+	    $(window).scroll(function () {
+	        // It only happens when touch the bottom of the page
+	        if ($(window).scrollTop() + $(window).height() === $(document).height()) {
+	            window.store.dispatch(getPokemons());
+	        }
+	    });
+	});
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(293)))
 
 /***/ }
 
