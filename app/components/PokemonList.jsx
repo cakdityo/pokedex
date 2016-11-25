@@ -15,7 +15,7 @@ class PokemonList extends React.Component {
         var { pokemons } = this.props;
 
         var renderPokemons = () => (
-            pokemons.results.map((pokemon, index) => (<div key={ index }>{ JSON.stringify(pokemon) }</div>))
+            pokemons.pokemons.map((pokemon, index) => (<div key={ index }>{ pokemon.id }, { pokemon.name }, { pokemon.weight }</div>))
         );
 
         return (

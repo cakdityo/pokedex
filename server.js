@@ -19,6 +19,14 @@ app.get('/api/pokemons', (req, res) => {
     });
 });
 
+app.get('/api/pokemon', (req, res) => {
+    axios.get(req.query.path).then((pokemon) => {
+        res.json(pokemon.data);
+    }, (err) => {
+        throw err;
+    });
+});
+
 app.listen(PORT, () => {
     console.log('Running on port 3000');
 });

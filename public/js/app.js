@@ -78,16 +78,18 @@ webpackJsonp([0],{
 	};
 
 	function pokemonsReducer() {
-	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { count: 0, previous: '', results: [], next: 'https://pokeapi.co/api/v2/pokemon' };
+	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { pokemons: [], next: 'https://pokeapi.co/api/v2/pokemon' };
 	    var action = arguments[1];
 
 
 	    switch (action.type) {
-	        case 'SET_POKEMONS':
+	        case 'SET_POKEMON':
 	            return Object.assign({}, state, {
-	                previous: action.pokemons.previous,
-	                results: [].concat(_toConsumableArray(state.results), _toConsumableArray(action.pokemons.results)),
-	                next: action.pokemons.next
+	                pokemons: [].concat(_toConsumableArray(state.pokemons), [action.pokemon])
+	            });
+	        case 'SET_NEXT_POKEMONS':
+	            return Object.assign({}, state, {
+	                next: action.next
 	            });
 	        default:
 	            return state;
@@ -188,11 +190,15 @@ webpackJsonp([0],{
 
 
 	            var renderPokemons = function renderPokemons() {
-	                return pokemons.results.map(function (pokemon, index) {
+	                return pokemons.pokemons.map(function (pokemon, index) {
 	                    return React.createElement(
 	                        'div',
 	                        { key: index },
-	                        JSON.stringify(pokemon)
+	                        pokemon.id,
+	                        ', ',
+	                        pokemon.name,
+	                        ', ',
+	                        pokemon.weight
 	                    );
 	                });
 	            };
@@ -232,15 +238,23 @@ webpackJsonp([0],{
 	    getPokemons: getPokemons
 	};
 
-	var rootUrl = '/api/pokemons';
-
 	function getPokemons() {
 	    return function (dispatch, getState) {
 	        var _getState = getState(),
 	            pokemons = _getState.pokemons;
 
-	        axios.get(rootUrl + '?next=' + pokemons.next).then(function (pokemons) {
-	            dispatch(_setPokemons(pokemons.data));
+	        axios.get('/api/pokemons?next=' + pokemons.next).then(function (newPokemons) {
+
+	            dispatch(_setNextPokemons(newPokemons.data.next));
+
+	            newPokemons.data.results.forEach(function (newPokemon) {
+	                axios.get('/api/pokemon?path=' + newPokemon.url).then(function (pokemon) {
+
+	                    dispatch(_setPokemon(pokemon.data));
+	                }, function (err) {
+	                    throw err;
+	                });
+	            });
 	        }, function (err) {
 	            throw err;
 	        });
@@ -250,10 +264,17 @@ webpackJsonp([0],{
 	// Private actions only called here
 	// =========================================================================
 
-	function _setPokemons(pokemons) {
+	function _setPokemon(pokemon) {
 	    return {
-	        type: 'SET_POKEMONS',
-	        pokemons: pokemons
+	        type: 'SET_POKEMON',
+	        pokemon: pokemon
+	    };
+	}
+
+	function _setNextPokemons(next) {
+	    return {
+	        type: 'SET_NEXT_POKEMONS',
+	        next: next
 	    };
 	}
 
