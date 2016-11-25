@@ -4,7 +4,7 @@
   "description": "Simple app for displaying Pokemon characters",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon server"
+    "start": "node server"
   },
   "author": "Adityo Rancaka",
   "license": "ISC",
