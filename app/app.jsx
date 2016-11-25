@@ -3,7 +3,7 @@ var ReactDOM = require('react-dom');
 var { Router, Route, browserHistory, IndexRoute } = require('react-router');
 var { Provider } = require('react-redux');
 
-var store = require('./store/configureStore')({ pokemons: ['Bulbasaur', 'Pikachu'] });
+var store = require('./store/configureStore')();
 var AppRoot = require('./components/AppRoot');
 var PokemonList = require('./components/PokemonList');
 

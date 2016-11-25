@@ -14,12 +14,12 @@ webpackJsonp([0],{
 	    browserHistory = _require.browserHistory,
 	    IndexRoute = _require.IndexRoute;
 
-	var _require2 = __webpack_require__(235),
+	var _require2 = __webpack_require__(233),
 	    Provider = _require2.Provider;
 
-	var store = __webpack_require__(291)({ pokemons: ['Bulbasaur', 'Pikachu'] });
-	var AppRoot = __webpack_require__(233);
-	var PokemonList = __webpack_require__(234);
+	var store = __webpack_require__(261)();
+	var AppRoot = __webpack_require__(264);
+	var PokemonList = __webpack_require__(265);
 
 	ReactDOM.render(React.createElement(
 	    Provider,
@@ -37,7 +37,64 @@ webpackJsonp([0],{
 
 /***/ },
 
-/***/ 233:
+/***/ 261:
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var redux = __webpack_require__(240);
+	var thunk = __webpack_require__(262).default;
+
+	var _require = __webpack_require__(263),
+	    pokemonsReducer = _require.pokemonsReducer;
+
+	module.exports = function () {
+	    var initialState = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+	    var reducer = redux.combineReducers({
+	        pokemons: pokemonsReducer
+	    });
+
+	    var store = redux.createStore(reducer, initialState,
+	    // Add THUNK middleware for handling asynchronous actions
+	    redux.compose(redux.applyMiddleware(thunk)));
+
+	    return store;
+	};
+
+/***/ },
+
+/***/ 263:
+/***/ function(module, exports) {
+
+	'use strict';
+
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+	module.exports = {
+	    pokemonsReducer: pokemonsReducer
+	};
+
+	function pokemonsReducer() {
+	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { count: 0, previous: '', results: [], next: '' };
+	    var action = arguments[1];
+
+
+	    switch (action.type) {
+	        case 'SET_POKEMONS':
+	            return Object.assign({}, state, {
+	                previous: action.pokemons.previous,
+	                results: [state.results].concat(_toConsumableArray(action.pokemons.results)),
+	                next: action.pokemons.next
+	            });
+	        default:
+	            return state;
+	    }
+	}
+
+/***/ },
+
+/***/ 264:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -84,7 +141,7 @@ webpackJsonp([0],{
 
 /***/ },
 
-/***/ 234:
+/***/ 265:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -99,8 +156,11 @@ webpackJsonp([0],{
 
 	var React = __webpack_require__(1);
 
-	var _require = __webpack_require__(235),
+	var _require = __webpack_require__(233),
 	    connect = _require.connect;
+
+	var _require2 = __webpack_require__(266),
+	    getPokemons = _require2.getPokemons;
 
 	var PokemonList = function (_React$Component) {
 	    _inherits(PokemonList, _React$Component);
@@ -112,13 +172,21 @@ webpackJsonp([0],{
 	    }
 
 	    _createClass(PokemonList, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            var dispatch = this.props.dispatch;
+
+
+	            dispatch(getPokemons());
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
 	            var pokemons = this.props.pokemons;
 
 
 	            var renderPokemons = function renderPokemons() {
-	                return pokemons.map(function (pokemon, index) {
+	                return pokemons.results.map(function (pokemon, index) {
 	                    return React.createElement(
 	                        'div',
 	                        { key: index },
@@ -151,55 +219,36 @@ webpackJsonp([0],{
 
 /***/ },
 
-/***/ 291:
+/***/ 266:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var redux = __webpack_require__(242);
-	var thunk = __webpack_require__(263).default;
-
-	var _require = __webpack_require__(292),
-	    pokemonsReducer = _require.pokemonsReducer;
-
-	module.exports = function () {
-	    var initialState = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
-	    var reducer = redux.combineReducers({
-	        pokemons: pokemonsReducer
-	    });
-
-	    var store = redux.createStore(reducer, initialState,
-	    // Add THUNK middleware for handling asynchronous actions
-	    redux.compose(redux.applyMiddleware(thunk)));
-
-	    return store;
-	};
-
-/***/ },
-
-/***/ 292:
-/***/ function(module, exports) {
-
-	'use strict';
-
-	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+	var axios = __webpack_require__(267);
 
 	module.exports = {
-	    pokemonsReducer: pokemonsReducer
+	    getPokemons: getPokemons
 	};
 
-	function pokemonsReducer() {
-	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-	    var action = arguments[1];
+	function getPokemons() {
+	    return function (dispatch) {
+	        axios.get('/api/pokemons').then(function (pokemons) {
+	            console.log(pokemons.data);
+	            // dispatch(_setPokemons(pokemons.data));
+	        }, function (err) {
+	            throw err;
+	        });
+	    };
+	}
 
+	// Private actions only called here
+	// =========================================================================
 
-	    switch (action.type) {
-	        case 'GET_POKEMONS':
-	            return [].concat(_toConsumableArray(action.pokemons));
-	        default:
-	            return state;
-	    }
+	function _setPokemons(pokemons) {
+	    return {
+	        type: 'SET_POKEMONS',
+	        pokemons: pokemons
+	    };
 	}
 
 /***/ }

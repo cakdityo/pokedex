@@ -1,12 +1,21 @@
 var React = require('react');
 var { connect } = require('react-redux');
 
+var { getPokemons } = require('../actions');
+
 class PokemonList extends React.Component {
+
+    componentDidMount() {
+        var { dispatch } = this.props;
+
+        dispatch(getPokemons());
+    }
+
     render() {
         var { pokemons } = this.props;
 
         var renderPokemons = () => (
-            pokemons.map((pokemon, index) => (<div key={ index }>{ pokemon }</div>))
+            pokemons.results.map((pokemon, index) => (<div key={ index }>{ pokemon }</div>))
         );
 
         return (
