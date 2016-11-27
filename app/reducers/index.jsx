@@ -19,6 +19,11 @@ function pokemonNextReducer(state='', action) {
 function pokemonsReducer(state=[], action) {
 
     switch(action.type) {
+        case 'INIT_POKEMONS':
+            return [
+                ...state,
+                ...action.pokemons
+            ];
         case 'SET_POKEMON':
             return [
                 ...state,

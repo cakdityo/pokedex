@@ -9,7 +9,7 @@ module.exports = {
     setFilterPokemonType: setFilterPokemonType
 };
 
-const rootUrl = 'https://powerful-falls-18959.herokuapp.com/api';
+const rootUrl = 'https://afternoon-thicket-83998.herokuapp.com/api';
 
 function getPokemons(){
     return (dispatch, getState) => {
@@ -27,6 +27,7 @@ function getPokemons(){
 
         axios.get(`${ rootUrl }/pokemon?offset=${ offset }`).then((newPokemons) => {
 
+            
             dispatch(_setNextPokemons(newPokemons.data.next));
 
             newPokemons.data.results.forEach((newPokemon) => {

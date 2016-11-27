@@ -36,14 +36,14 @@ app.get('/api/pokemon/:name', (req, res) => {
 
 app.get('/api/type', (req, res) => {
     axios.get(`${ rootUrl }/type`).then((types) => {
-        res.json(types);
+        res.json(types.data);
     }, (err) => {
         throw err;
     });
 });
 
-app.get('/api/type/:id', (req, res) => {
-    axios.get(`${ rootUrl }/type/${ req.params.id }`).then((type) => {
+app.get('/api/type/:name', (req, res) => {
+    axios.get(`${ rootUrl }/type/${ req.params.name }`).then((type) => {
         res.json(type.data);
     }, (err) => {
         throw err;

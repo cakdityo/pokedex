@@ -110,6 +110,8 @@ webpackJsonp([0],{
 
 
 	    switch (action.type) {
+	        case 'INIT_POKEMONS':
+	            return [].concat(_toConsumableArray(state), _toConsumableArray(action.pokemons));
 	        case 'SET_POKEMON':
 	            return [].concat(_toConsumableArray(state), [action.pokemon]);
 	        default:
@@ -452,7 +454,7 @@ webpackJsonp([0],{
 	    setFilterPokemonType: setFilterPokemonType
 	};
 
-	var rootUrl = 'https://powerful-falls-18959.herokuapp.com/api';
+	var rootUrl = 'https://afternoon-thicket-83998.herokuapp.com/api';
 
 	function getPokemons() {
 	    return function (dispatch, getState) {
