@@ -164,7 +164,10 @@ webpackJsonp([0],{
 	        sprites: {
 	            front_default: '',
 	            back_default: ''
-	        }
+	        },
+	        types: [],
+	        abilities: [],
+	        stats: []
 	    };
 	}
 
@@ -215,7 +218,8 @@ webpackJsonp([0],{
 	                            'div',
 	                            { className: ' col-sm-offset-3 col-sm-6' },
 	                            React.createElement(PokemonFilter, null),
-	                            React.createElement(PokemonList, null)
+	                            React.createElement(PokemonList, null),
+	                            this.props.children
 	                        )
 	                    )
 	                )
@@ -233,7 +237,7 @@ webpackJsonp([0],{
 /***/ 265:
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -245,6 +249,9 @@ webpackJsonp([0],{
 
 	var React = __webpack_require__(1);
 
+	var _require = __webpack_require__(178),
+	    Link = _require.Link;
+
 	var Navbar = function (_React$Component) {
 	    _inherits(Navbar, _React$Component);
 
@@ -255,21 +262,21 @@ webpackJsonp([0],{
 	    }
 
 	    _createClass(Navbar, [{
-	        key: "render",
+	        key: 'render',
 	        value: function render() {
 	            return React.createElement(
-	                "nav",
-	                { className: "navbar navbar-default" },
+	                'nav',
+	                { className: 'navbar navbar-default' },
 	                React.createElement(
-	                    "div",
-	                    { className: "container" },
+	                    'div',
+	                    { className: 'container' },
 	                    React.createElement(
-	                        "div",
-	                        { className: "navbar-header" },
+	                        'div',
+	                        { className: 'navbar-header' },
 	                        React.createElement(
-	                            "a",
-	                            { className: "navbar-brand", href: "#" },
-	                            "Pok\xE9dex"
+	                            Link,
+	                            { to: '/', className: 'navbar-brand' },
+	                            'Pok\xE9dex'
 	                        )
 	                    )
 	                )
@@ -483,10 +490,19 @@ webpackJsonp([0],{
 	}
 
 	function getPokemonDetail(name) {
-	    return function (dispatch) {
-	        axios.get(rootUrl + '/pokemon/' + name).then(function (pokemon) {
-	            dispatch(_setPokemonDetail(pokemon.data));
+	    return function (dispatch, getState) {
+	        var pokemons = getState().pokemons;
+	        var fetchedPokemon = pokemons.find(function (fetchedPokemon) {
+	            return fetchedPokemon.name === name;
 	        });
+
+	        if (fetchedPokemon) {
+	            dispatch(_setPokemonDetail(fetchedPokemon));
+	        } else {
+	            axios.get(rootUrl + '/pokemon/' + name).then(function (pokemon) {
+	                dispatch(_setPokemonDetail(pokemon.data));
+	            });
+	        }
 	    };
 	}
 
@@ -749,7 +765,7 @@ webpackJsonp([0],{
 /***/ 295:
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	/* WEBPACK VAR INJECTION */(function($) {'use strict';
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -764,8 +780,11 @@ webpackJsonp([0],{
 	var _require = __webpack_require__(233),
 	    connect = _require.connect;
 
-	var _require2 = __webpack_require__(267),
-	    getPokemonDetail = _require2.getPokemonDetail;
+	var _require2 = __webpack_require__(178),
+	    browserHistory = _require2.browserHistory;
+
+	var _require3 = __webpack_require__(267),
+	    getPokemonDetail = _require3.getPokemonDetail;
 
 	var PokemonDetail = function (_React$Component) {
 	    _inherits(PokemonDetail, _React$Component);
@@ -773,32 +792,25 @@ webpackJsonp([0],{
 	    function PokemonDetail() {
 	        _classCallCheck(this, PokemonDetail);
 
-	        var _this = _possibleConstructorReturn(this, (PokemonDetail.__proto__ || Object.getPrototypeOf(PokemonDetail)).call(this));
-
-	        _this.fetchPokemon = _this.fetchPokemon.bind(_this);
-	        return _this;
+	        return _possibleConstructorReturn(this, (PokemonDetail.__proto__ || Object.getPrototypeOf(PokemonDetail)).apply(this, arguments));
 	    }
 
 	    _createClass(PokemonDetail, [{
-	        key: 'componentWillReceiveProps',
-	        value: function componentWillReceiveProps(nextProps) {
-	            var params = nextProps.params;
-
-	            this.fetchPokemon(params.pokemonName);
-	        }
-	    }, {
 	        key: 'componentDidMount',
 	        value: function componentDidMount() {
-	            var params = this.props.params;
+	            var _this2 = this;
 
-	            this.fetchPokemon(params.pokemonName);
-	        }
-	    }, {
-	        key: 'fetchPokemon',
-	        value: function fetchPokemon(pokemonName) {
-	            var dispatch = this.props.dispatch;
+	            var _props = this.props,
+	                dispatch = _props.dispatch,
+	                params = _props.params,
+	                location = _props.location;
 
-	            dispatch(getPokemonDetail(pokemonName));
+
+	            dispatch(getPokemonDetail(params.pokemonName));
+	            $('#pokemon-detail').modal('show');
+	            $('#pokemon-detail').on('hidden.bs.modal', function () {
+	                _this2.props.router.push('/');
+	            });
 	        }
 	    }, {
 	        key: 'render',
@@ -806,26 +818,114 @@ webpackJsonp([0],{
 	            var pokemon = this.props.pokemon;
 
 
+	            var renderTypes = function renderTypes() {
+	                return pokemon.types.map(function (type, index) {
+	                    return React.createElement(
+	                        'li',
+	                        { key: index },
+	                        type.type.name
+	                    );
+	                });
+	            };
+
+	            var renderAbilities = function renderAbilities() {
+	                return pokemon.abilities.map(function (ability, index) {
+	                    return React.createElement(
+	                        'li',
+	                        { key: index },
+	                        ability.ability.name
+	                    );
+	                });
+	            };
+
+	            var renderStatus = function renderStatus() {
+	                return pokemon.stats.map(function (stat, index) {
+	                    return React.createElement(
+	                        'li',
+	                        { key: index },
+	                        ' ',
+	                        React.createElement(
+	                            'strong',
+	                            null,
+	                            stat.stat.name,
+	                            ' '
+	                        ),
+	                        ': ',
+	                        stat.base_stat
+	                    );
+	                });
+	            };
+
 	            return React.createElement(
 	                'div',
-	                { id: 'pokemon-detail', className: 'row' },
-	                React.createElement(
-	                    'h1',
-	                    null,
-	                    pokemon.name
-	                ),
+	                { id: 'pokemon-detail', className: 'modal fade bs-example-modal-sm', tabIndex: '-1', role: 'dialog', 'aria-labelledby': 'mySmallModalLabel' },
 	                React.createElement(
 	                    'div',
-	                    { className: 'row' },
+	                    { className: 'modal-dialog modal-sm', role: 'document' },
 	                    React.createElement(
 	                        'div',
-	                        { className: 'col-sm-offset-4 col-sm-2' },
-	                        React.createElement('img', { src: pokemon.sprites.front_default, alt: '' })
-	                    ),
-	                    React.createElement(
-	                        'div',
-	                        { className: 'col-sm-2' },
-	                        React.createElement('img', { src: pokemon.sprites.back_default, alt: '' })
+	                        { className: 'modal-content' },
+	                        React.createElement(
+	                            'div',
+	                            { className: 'modal-header' },
+	                            React.createElement(
+	                                'button',
+	                                { type: 'button', className: 'close', 'data-dismiss': 'modal', 'aria-label': 'Close' },
+	                                React.createElement(
+	                                    'span',
+	                                    { 'aria-hidden': 'true' },
+	                                    '\xD7'
+	                                )
+	                            ),
+	                            React.createElement(
+	                                'h4',
+	                                { className: 'modal-title' },
+	                                pokemon.name
+	                            )
+	                        ),
+	                        React.createElement(
+	                            'div',
+	                            { className: 'modal-body' },
+	                            React.createElement(
+	                                'div',
+	                                { className: 'img-container' },
+	                                React.createElement('img', { src: pokemon.sprites.front_default, alt: pokemon.name })
+	                            )
+	                        ),
+	                        React.createElement(
+	                            'div',
+	                            { className: 'modal-footer' },
+	                            React.createElement(
+	                                'h4',
+	                                null,
+	                                'Types:'
+	                            ),
+	                            React.createElement(
+	                                'ul',
+	                                null,
+	                                renderTypes()
+	                            ),
+	                            React.createElement(
+	                                'h4',
+	                                null,
+	                                'Abilities:'
+	                            ),
+	                            React.createElement(
+	                                'ul',
+	                                null,
+	                                renderAbilities()
+	                            ),
+	                            React.createElement(
+	                                'h4',
+	                                null,
+	                                'Status:'
+	                            ),
+	                            React.createElement(
+	                                'ul',
+	                                null,
+	                                renderStatus()
+	                            )
+	                        )
 	                    )
 	                )
 	            );
@@ -840,6 +940,7 @@ webpackJsonp([0],{
 	        pokemon: state.pokemonDetail
 	    };
 	})(PokemonDetail);
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(297)))
 
 /***/ },
 

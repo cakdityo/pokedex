@@ -14,6 +14,7 @@ class AppRoot extends React.Component {
                         <div className=" col-sm-offset-3 col-sm-6">
                             <PokemonFilter />
                             <PokemonList />
+                            { this.props.children }
                         </div>
                     </div>
                 </div>

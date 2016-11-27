@@ -26,3 +26,22 @@
     border-color: lightgreen !important;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
+
+#pokemon-detail {
+    .modal-title {
+        text-align: center;
+        font-size: 1.7em;
+        font-weight: bold;
+        text-transform: capitalize;
+    }
+    .img-container {
+        width: 100px;
+        margin: auto;
+    }
+    .modal-footer {
+        h4 {
+            font-weight: bold;
+        }
+        text-align: left;
+    }
+}

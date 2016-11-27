@@ -71,6 +71,9 @@ function setDefaultPokemonDetail(){
         sprites: {
             front_default: '',
             back_default: ''
-        }
+        },
+        types: [],
+        abilities: [],
+        stats: []
     }
 }

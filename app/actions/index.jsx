@@ -42,10 +42,17 @@ function getPokemons(){
 }
 
 function getPokemonDetail(name) {
-    return (dispatch) => {
-        axios.get(`${ rootUrl }/pokemon/${ name }`).then((pokemon) => {
-            dispatch(_setPokemonDetail(pokemon.data));
-        });
+    return (dispatch, getState) => {
+        var pokemons = getState().pokemons;
+        var fetchedPokemon = pokemons.find((fetchedPokemon) => (fetchedPokemon.name === name));
+
+        if (fetchedPokemon) {
+            dispatch(_setPokemonDetail(fetchedPokemon));
+        } else {
+            axios.get(`${ rootUrl }/pokemon/${ name }`).then((pokemon) => {
+                dispatch(_setPokemonDetail(pokemon.data));
+            });
+        }
     }
 }
 

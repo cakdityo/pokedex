@@ -1,4 +1,5 @@
 var React = require('react');
+var { Link } = require('react-router');
 
 class Navbar extends React.Component{
     render(){
@@ -6,7 +7,7 @@ class Navbar extends React.Component{
             <nav className="navbar navbar-default">
                 <div className="container">
                     <div className="navbar-header">
-                        <a className="navbar-brand" href="#">Pok&#233;dex</a>
+                        <Link to='/' className="navbar-brand">Pok&#233;dex</Link>
                     </div>
                 </div>
             </nav>
