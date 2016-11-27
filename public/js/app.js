@@ -454,7 +454,7 @@ webpackJsonp([0],{
 	    setFilterPokemonType: setFilterPokemonType
 	};
 
-	var rootUrl = 'https://afternoon-thicket-83998.herokuapp.com/api';
+	var rootUrl = 'https://pokecak.herokuapp.com/api';
 
 	function getPokemons() {
 	    return function (dispatch, getState) {

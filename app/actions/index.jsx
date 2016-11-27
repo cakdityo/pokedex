@@ -9,7 +9,7 @@ module.exports = {
     setFilterPokemonType: setFilterPokemonType
 };
 
-const rootUrl = 'https://afternoon-thicket-83998.herokuapp.com/api';
+const rootUrl = 'https://pokecak.herokuapp.com/api';
 
 function getPokemons(){
     return (dispatch, getState) => {
