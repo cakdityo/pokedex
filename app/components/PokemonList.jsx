@@ -12,16 +12,34 @@ class PokemonList extends React.Component {
         dispatch(getPokemons());
     }
 
-    filterPokemons(pokemons, filterName){
-        return pokemons.filter((pokemon) => {
+    filterPokemons(pokemons, filterName, filterType){
+        var filteredPokemons = pokemons;
+
+        if (filterType) {
+            filteredPokemons = filteredPokemons.filter((pokemon) => {
+                if (pokemon.types.find((type) => (type.type.name === filterType))) {
+                    return true;
+                }
+            });
+        }
+        
+        filteredPokemons = filteredPokemons.filter((pokemon) => {
             return filterName.length === 0 || pokemon.name.indexOf(filterName) > -1;
         });
+
+        return filteredPokemons;
     }
 
     render() {
         var { pokemons, filter } = this.props;
 
-        var filteredPokemons = this.filterPokemons(pokemons.pokemons, filter.name);
+        var filteredPokemons = this.filterPokemons(pokemons, filter.name, filter.type);
+
+        var renderTypeMessage = () => {
+            if (filter.type) {
+                return (<p>Type: { filter.type }</p>);
+            }
+        }
 
         var renderPokemons = () => {
             return filteredPokemons.map(
@@ -37,6 +55,7 @@ class PokemonList extends React.Component {
 
         return (
             <div id="pokemon-list">
+                { renderTypeMessage() }
                 <div className="row">
                     { renderPokemons() }
                 </div>

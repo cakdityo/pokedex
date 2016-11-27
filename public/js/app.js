@@ -19,11 +19,11 @@ webpackJsonp([0],{
 
 	window.store = __webpack_require__(261)();
 	var AppRoot = __webpack_require__(264);
-	var PokemonList = __webpack_require__(266);
-	var PokemonDetail = __webpack_require__(294);
+	var PokemonList = __webpack_require__(293);
+	var PokemonDetail = __webpack_require__(295);
 
-	__webpack_require__(295);
-	__webpack_require__(297);
+	__webpack_require__(296);
+	__webpack_require__(298);
 
 	ReactDOM.render(React.createElement(
 	    Provider,
@@ -50,17 +50,21 @@ webpackJsonp([0],{
 	var thunk = __webpack_require__(262).default;
 
 	var _require = __webpack_require__(263),
+	    pokemonNextReducer = _require.pokemonNextReducer,
 	    pokemonsReducer = _require.pokemonsReducer,
 	    pokemonDetailReducer = _require.pokemonDetailReducer,
-	    pokemonFilterReducer = _require.pokemonFilterReducer;
+	    pokemonFilterReducer = _require.pokemonFilterReducer,
+	    pokemonTypesReducer = _require.pokemonTypesReducer;
 
 	module.exports = function () {
 	    var initialState = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
 	    var reducer = redux.combineReducers({
+	        next: pokemonNextReducer,
 	        pokemons: pokemonsReducer,
 	        pokemonDetail: pokemonDetailReducer,
-	        pokemonFilter: pokemonFilterReducer
+	        pokemonFilter: pokemonFilterReducer,
+	        types: pokemonTypesReducer
 	    });
 
 	    var store = redux.createStore(reducer, initialState,
@@ -80,25 +84,34 @@ webpackJsonp([0],{
 	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 	module.exports = {
+	    pokemonNextReducer: pokemonNextReducer,
 	    pokemonsReducer: pokemonsReducer,
 	    pokemonDetailReducer: pokemonDetailReducer,
-	    pokemonFilterReducer: pokemonFilterReducer
+	    pokemonFilterReducer: pokemonFilterReducer,
+	    pokemonTypesReducer: pokemonTypesReducer
 	};
 
+	function pokemonNextReducer() {
+	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+	    var action = arguments[1];
+
+
+	    switch (action.type) {
+	        case 'SET_NEXT_POKEMONS':
+	            return action.next;
+	        default:
+	            return state;
+	    }
+	}
+
 	function pokemonsReducer() {
-	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { pokemons: [], next: '' };
+	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
 	    var action = arguments[1];
 
 
 	    switch (action.type) {
 	        case 'SET_POKEMON':
-	            return Object.assign({}, state, {
-	                pokemons: [].concat(_toConsumableArray(state.pokemons), [action.pokemon])
-	            });
-	        case 'SET_NEXT_POKEMONS':
-	            return Object.assign({}, state, {
-	                next: action.next
-	            });
+	            return [].concat(_toConsumableArray(state), [action.pokemon]);
 	        default:
 	            return state;
 	    }
@@ -121,9 +134,25 @@ webpackJsonp([0],{
 	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { name: '', type: '' };
 	    var action = arguments[1];
 
+
 	    switch (action.type) {
 	        case 'SET_FILTER_POKEMON_NAME':
 	            return Object.assign({}, state, { name: action.name });
+	        case 'SET_FILTER_POKEMON_TYPE':
+	            return Object.assign({}, state, { type: action._type });
+	        default:
+	            return state;
+	    }
+	}
+
+	function pokemonTypesReducer() {
+	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+	    var action = arguments[1];
+
+
+	    switch (action.type) {
+	        case 'SET_TYPES':
+	            return [].concat(_toConsumableArray(action.types));
 	        default:
 	            return state;
 	    }
@@ -157,8 +186,8 @@ webpackJsonp([0],{
 	var React = __webpack_require__(1);
 
 	var Navbar = __webpack_require__(265);
-	var PokemonFilter = __webpack_require__(309);
-	var PokemonList = __webpack_require__(266);
+	var PokemonFilter = __webpack_require__(266);
+	var PokemonList = __webpack_require__(293);
 
 	var AppRoot = function (_React$Component) {
 	    _inherits(AppRoot, _React$Component);
@@ -274,75 +303,129 @@ webpackJsonp([0],{
 	    connect = _require.connect;
 
 	var _require2 = __webpack_require__(267),
-	    getPokemons = _require2.getPokemons;
+	    setFilterPokemonName = _require2.setFilterPokemonName,
+	    setFilterPokemonType = _require2.setFilterPokemonType,
+	    getPokemonTypeDetail = _require2.getPokemonTypeDetail,
+	    getPokemonTypes = _require2.getPokemonTypes;
 
-	var Pokemon = __webpack_require__(293);
+	var PokemonFilter = function (_React$Component) {
+	    _inherits(PokemonFilter, _React$Component);
 
-	var PokemonList = function (_React$Component) {
-	    _inherits(PokemonList, _React$Component);
+	    function PokemonFilter() {
+	        _classCallCheck(this, PokemonFilter);
 
-	    function PokemonList() {
-	        _classCallCheck(this, PokemonList);
+	        var _this = _possibleConstructorReturn(this, (PokemonFilter.__proto__ || Object.getPrototypeOf(PokemonFilter)).call(this));
 
-	        return _possibleConstructorReturn(this, (PokemonList.__proto__ || Object.getPrototypeOf(PokemonList)).apply(this, arguments));
+	        _this.filterByName = _this.filterByName.bind(_this);
+	        _this.filterByType = _this.filterByType.bind(_this);
+	        return _this;
 	    }
 
-	    _createClass(PokemonList, [{
+	    _createClass(PokemonFilter, [{
 	        key: 'componentDidMount',
 	        value: function componentDidMount() {
 	            var dispatch = this.props.dispatch;
 
 
-	            dispatch(getPokemons());
+	            dispatch(getPokemonTypes());
 	        }
 	    }, {
-	        key: 'filterPokemons',
-	        value: function filterPokemons(pokemons, filterName) {
-	            return pokemons.filter(function (pokemon) {
-	                return filterName.length === 0 || pokemon.name.indexOf(filterName) > -1;
-	            });
+	        key: 'filterByName',
+	        value: function filterByName() {
+	            var dispatch = this.props.dispatch;
+
+	            var name = this.name.value;
+	            dispatch(setFilterPokemonName(name));
+	        }
+	    }, {
+	        key: 'filterByType',
+	        value: function filterByType() {
+	            var dispatch = this.props.dispatch;
+
+	            var typeName = this.type.value;
+	            dispatch(setFilterPokemonType(typeName));
+	            if (typeName.length > 0) {
+	                dispatch(getPokemonTypeDetail(typeName));
+	            }
 	        }
 	    }, {
 	        key: 'render',
 	        value: function render() {
-	            var _props = this.props,
-	                pokemons = _props.pokemons,
-	                filter = _props.filter;
+	            var _this2 = this;
+
+	            var types = this.props.types;
 
 
-	            var filteredPokemons = this.filterPokemons(pokemons.pokemons, filter.name);
-
-	            var renderPokemons = function renderPokemons() {
-	                return filteredPokemons.map(function (pokemon, index) {
+	            var renderTypes = function renderTypes() {
+	                return types.map(function (type) {
 	                    return React.createElement(
-	                        'div',
-	                        { key: pokemon.id, className: 'col-sm-3' },
-	                        React.createElement(Pokemon, pokemon)
+	                        'option',
+	                        { key: type.name, value: type.name },
+	                        type.name
 	                    );
 	                });
 	            };
 
 	            return React.createElement(
 	                'div',
-	                { id: 'pokemon-list' },
+	                { className: 'row', id: 'pokemon-search' },
 	                React.createElement(
 	                    'div',
-	                    { className: 'row' },
-	                    renderPokemons()
+	                    { className: 'form-horizontal' },
+	                    React.createElement(
+	                        'div',
+	                        { className: 'form-group' },
+	                        React.createElement(
+	                            'label',
+	                            { className: 'col-sm-2 control-label', htmlFor: 'name' },
+	                            'Name:'
+	                        ),
+	                        React.createElement(
+	                            'div',
+	                            { className: 'col-sm-10' },
+	                            React.createElement('input', { id: 'name', onChange: this.filterByName, ref: function ref(name) {
+	                                    return _this2.name = name;
+	                                }, type: 'search', className: 'form-control', placeholder: 'Enter Pokemon name' })
+	                        )
+	                    ),
+	                    React.createElement(
+	                        'div',
+	                        { className: 'form-group' },
+	                        React.createElement(
+	                            'label',
+	                            { className: 'col-sm-2 control-label', htmlFor: 'type' },
+	                            'Type:'
+	                        ),
+	                        React.createElement(
+	                            'div',
+	                            { className: 'col-sm-10' },
+	                            React.createElement(
+	                                'select',
+	                                { onChange: this.filterByType, id: 'type', className: 'form-control', ref: function ref(type) {
+	                                        return _this2.type = type;
+	                                    } },
+	                                React.createElement(
+	                                    'option',
+	                                    { value: '' },
+	                                    'All'
+	                                ),
+	                                renderTypes()
+	                            )
+	                        )
+	                    )
 	                )
 	            );
 	        }
 	    }]);
 
-	    return PokemonList;
+	    return PokemonFilter;
 	}(React.Component);
 
 	module.exports = connect(function (state) {
 	    return {
-	        pokemons: state.pokemons,
-	        filter: state.pokemonFilter
+	        types: state.types
 	    };
-	})(PokemonList);
+	})(PokemonFilter);
 
 /***/ },
 
@@ -354,43 +437,47 @@ webpackJsonp([0],{
 	var axios = __webpack_require__(268);
 
 	module.exports = {
-	    setFilterPokemonName: setFilterPokemonName,
 	    getPokemons: getPokemons,
-	    getPokemonDetail: getPokemonDetail
+	    getPokemonDetail: getPokemonDetail,
+	    getPokemonTypes: getPokemonTypes,
+	    getPokemonTypeDetail: getPokemonTypeDetail,
+	    setFilterPokemonName: setFilterPokemonName,
+	    setFilterPokemonType: setFilterPokemonType
 	};
 
 	var rootUrl = 'https://powerful-falls-18959.herokuapp.com/api';
 
-	function setFilterPokemonName(name) {
-	    return {
-	        type: 'SET_FILTER_POKEMON_NAME',
-	        name: name
-	    };
-	}
-
 	function getPokemons() {
 	    return function (dispatch, getState) {
 	        var _getState = getState(),
+	            next = _getState.next,
 	            pokemons = _getState.pokemons;
 
-	        var next = pokemons.next || rootUrl;
 	        // Looking for offset 
-	        var offset = next.match(/\?offset=[0-9]+/) || '';
 
-	        axios.get(rootUrl + '/pokemon' + offset).then(function (newPokemons) {
+
+	        var offset = next.match(/[0-9]+/g);
+	        // Reg Exp above always return ['2', OFFSET_NUMBER]
+	        // So I have to get the array index 1 element
+	        // I don't know better RegExp to implement this
+	        if (offset !== null) {
+	            offset = offset[1];
+	        }
+
+	        axios.get(rootUrl + '/pokemon?offset=' + offset).then(function (newPokemons) {
 
 	            dispatch(_setNextPokemons(newPokemons.data.next));
 
 	            newPokemons.data.results.forEach(function (newPokemon) {
-	                axios.get(rootUrl + '/pokemon/' + newPokemon.name).then(function (pokemon) {
-
-	                    dispatch(_setPokemon(pokemon.data));
-	                }, function (err) {
-	                    throw err;
-	                });
+	                // Only fetch if pokemon has not been fectched yet
+	                if (!pokemons.find(function (fetchedPokemon) {
+	                    return fetchedPokemon.name === newPokemon.name;
+	                })) {
+	                    axios.get(rootUrl + '/pokemon/' + newPokemon.name).then(function (pokemon) {
+	                        dispatch(_setPokemon(pokemon.data));
+	                    });
+	                }
 	            });
-	        }, function (err) {
-	            throw err;
 	        });
 	    };
 	}
@@ -400,6 +487,54 @@ webpackJsonp([0],{
 	        axios.get(rootUrl + '/pokemon/' + name).then(function (pokemon) {
 	            dispatch(_setPokemonDetail(pokemon.data));
 	        });
+	    };
+	}
+
+	function getPokemonTypes() {
+	    return function (dispatch) {
+	        axios.get(rootUrl + '/type').then(function (types) {
+	            dispatch(_setPokemonTypes(types.data.results));
+	        });
+	    };
+	}
+
+	function getPokemonTypeDetail(typeName) {
+	    return function (dispatch, getState) {
+
+	        // Fetch specified type with its all pokemons
+	        axios.get(rootUrl + '/type/' + typeName).then(function (type) {
+	            var _getState2 = getState(),
+	                pokemons = _getState2.pokemons;
+
+	            // Iterate over all pokemons in associated type
+
+
+	            type.data.pokemon.forEach(function (pokemon) {
+
+	                // Only fetch if pokemon has not been fectched yet
+	                if (!pokemons.find(function (fetchedPokemon) {
+	                    return fetchedPokemon.name === pokemon.pokemon.name;
+	                })) {
+	                    axios.get(rootUrl + '/pokemon/' + pokemon.pokemon.name).then(function (pokemon) {
+	                        dispatch(_setPokemon(pokemon.data));
+	                    });
+	                }
+	            });
+	        });
+	    };
+	}
+
+	function setFilterPokemonName(name) {
+	    return {
+	        type: 'SET_FILTER_POKEMON_NAME',
+	        name: name
+	    };
+	}
+
+	function setFilterPokemonType(_type) {
+	    return {
+	        type: 'SET_FILTER_POKEMON_TYPE',
+	        _type: _type
 	    };
 	}
 
@@ -427,9 +562,133 @@ webpackJsonp([0],{
 	    };
 	}
 
+	function _setPokemonTypes(types) {
+	    return {
+	        type: 'SET_TYPES',
+	        types: types
+	    };
+	}
+
 /***/ },
 
 /***/ 293:
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var React = __webpack_require__(1);
+
+	var _require = __webpack_require__(233),
+	    connect = _require.connect;
+
+	var _require2 = __webpack_require__(267),
+	    getPokemons = _require2.getPokemons;
+
+	var Pokemon = __webpack_require__(294);
+
+	var PokemonList = function (_React$Component) {
+	    _inherits(PokemonList, _React$Component);
+
+	    function PokemonList() {
+	        _classCallCheck(this, PokemonList);
+
+	        return _possibleConstructorReturn(this, (PokemonList.__proto__ || Object.getPrototypeOf(PokemonList)).apply(this, arguments));
+	    }
+
+	    _createClass(PokemonList, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            var dispatch = this.props.dispatch;
+
+
+	            dispatch(getPokemons());
+	        }
+	    }, {
+	        key: 'filterPokemons',
+	        value: function filterPokemons(pokemons, filterName, filterType) {
+	            var filteredPokemons = pokemons;
+
+	            if (filterType) {
+	                filteredPokemons = filteredPokemons.filter(function (pokemon) {
+	                    if (pokemon.types.find(function (type) {
+	                        return type.type.name === filterType;
+	                    })) {
+	                        return true;
+	                    }
+	                });
+	            }
+
+	            filteredPokemons = filteredPokemons.filter(function (pokemon) {
+	                return filterName.length === 0 || pokemon.name.indexOf(filterName) > -1;
+	            });
+
+	            return filteredPokemons;
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            var _props = this.props,
+	                pokemons = _props.pokemons,
+	                filter = _props.filter;
+
+
+	            var filteredPokemons = this.filterPokemons(pokemons, filter.name, filter.type);
+
+	            var renderTypeMessage = function renderTypeMessage() {
+	                if (filter.type) {
+	                    return React.createElement(
+	                        'p',
+	                        null,
+	                        'Type: ',
+	                        filter.type
+	                    );
+	                }
+	            };
+
+	            var renderPokemons = function renderPokemons() {
+	                return filteredPokemons.map(function (pokemon, index) {
+	                    return React.createElement(
+	                        'div',
+	                        { key: pokemon.id, className: 'col-sm-3' },
+	                        React.createElement(Pokemon, pokemon)
+	                    );
+	                });
+	            };
+
+	            return React.createElement(
+	                'div',
+	                { id: 'pokemon-list' },
+	                renderTypeMessage(),
+	                React.createElement(
+	                    'div',
+	                    { className: 'row' },
+	                    renderPokemons()
+	                )
+	            );
+	        }
+	    }]);
+
+	    return PokemonList;
+	}(React.Component);
+
+	module.exports = connect(function (state) {
+	    return {
+	        pokemons: state.pokemons,
+	        filter: state.pokemonFilter
+	    };
+	})(PokemonList);
+
+/***/ },
+
+/***/ 294:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -487,7 +746,7 @@ webpackJsonp([0],{
 
 /***/ },
 
-/***/ 294:
+/***/ 295:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -584,7 +843,7 @@ webpackJsonp([0],{
 
 /***/ },
 
-/***/ 295:
+/***/ 296:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function($) {'use strict';
@@ -604,77 +863,14 @@ webpackJsonp([0],{
 	        }
 	    });
 	});
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(296)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(297)))
 
 /***/ },
 
-/***/ 297:
+/***/ 298:
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
-
-/***/ },
-
-/***/ 309:
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var React = __webpack_require__(1);
-
-	var _require = __webpack_require__(233),
-	    connect = _require.connect;
-
-	var _require2 = __webpack_require__(267),
-	    setFilterPokemonName = _require2.setFilterPokemonName;
-
-	var PokemonFilter = function (_React$Component) {
-	    _inherits(PokemonFilter, _React$Component);
-
-	    function PokemonFilter() {
-	        _classCallCheck(this, PokemonFilter);
-
-	        var _this = _possibleConstructorReturn(this, (PokemonFilter.__proto__ || Object.getPrototypeOf(PokemonFilter)).call(this));
-
-	        _this.filterByName = _this.filterByName.bind(_this);
-	        return _this;
-	    }
-
-	    _createClass(PokemonFilter, [{
-	        key: 'filterByName',
-	        value: function filterByName() {
-	            var dispatch = this.props.dispatch;
-
-	            var name = this.filter.value;
-	            dispatch(setFilterPokemonName(name));
-	        }
-	    }, {
-	        key: 'render',
-	        value: function render() {
-	            var _this2 = this;
-
-	            return React.createElement(
-	                'div',
-	                { className: 'row', id: 'pokemon-search' },
-	                React.createElement('input', { onChange: this.filterByName, ref: function ref(filter) {
-	                        return _this2.filter = filter;
-	                    }, type: 'text', className: 'form-control', placeholder: 'Filter pokemon by name' })
-	            );
-	        }
-	    }]);
-
-	    return PokemonFilter;
-	}(React.Component);
-
-	module.exports = connect()(PokemonFilter);
 
 /***/ }
 

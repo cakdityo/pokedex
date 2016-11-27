@@ -2,16 +2,20 @@ var redux = require('redux');
 var thunk = require('redux-thunk').default;
 
 var {
+    pokemonNextReducer,
     pokemonsReducer,
     pokemonDetailReducer,
-    pokemonFilterReducer
+    pokemonFilterReducer,
+    pokemonTypesReducer
 } = require('../reducers');
 
 module.exports = function(initialState={}) {
     var reducer = redux.combineReducers({
+        next: pokemonNextReducer,
         pokemons: pokemonsReducer,
         pokemonDetail: pokemonDetailReducer,
-        pokemonFilter: pokemonFilterReducer
+        pokemonFilter: pokemonFilterReducer,
+        types: pokemonTypesReducer
     });
 
     var store = redux.createStore(

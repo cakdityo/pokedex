@@ -1,23 +1,29 @@
 module.exports = {
+    pokemonNextReducer: pokemonNextReducer,
     pokemonsReducer: pokemonsReducer,
     pokemonDetailReducer: pokemonDetailReducer,
-    pokemonFilterReducer: pokemonFilterReducer
+    pokemonFilterReducer: pokemonFilterReducer,
+    pokemonTypesReducer: pokemonTypesReducer
 }
 
-function pokemonsReducer(state={ pokemons: [], next: ''}, action) {
+function pokemonNextReducer(state='', action) {
+    
+    switch(action.type) {
+        case 'SET_NEXT_POKEMONS':
+            return action.next;
+        default:
+            return state;
+    }
+}
+
+function pokemonsReducer(state=[], action) {
 
     switch(action.type) {
         case 'SET_POKEMON':
-            return Object.assign({}, state, {
-                pokemons: [
-                    ...state.pokemons,
-                    action.pokemon
-                ],
-            });
-        case 'SET_NEXT_POKEMONS':
-            return Object.assign({}, state, {
-                next: action.next
-            });
+            return [
+                ...state,
+                action.pokemon
+            ];
         default:
             return state;
     }
@@ -36,12 +42,27 @@ function pokemonDetailReducer(state=setDefaultPokemonDetail(), action) {
 }
 
 function pokemonFilterReducer(state={ name: '', type: '' }, action) {
+
     switch(action.type) {
         case 'SET_FILTER_POKEMON_NAME':
             return Object.assign({}, state, { name: action.name });
+        case 'SET_FILTER_POKEMON_TYPE':
+            return Object.assign({}, state, { type: action._type });
         default:
             return state;
     }
+    
+}
+
+function pokemonTypesReducer(state=[], action) {
+
+    switch(action.type) {
+        case 'SET_TYPES':
+            return [ ...action.types ];
+        default:
+            return state;
+    }
+
 }
 
 function setDefaultPokemonDetail(){

@@ -1,43 +1,42 @@
 var axios = require('axios');
 
 module.exports = {
-    setFilterPokemonName: setFilterPokemonName,
     getPokemons: getPokemons,
-    getPokemonDetail: getPokemonDetail
+    getPokemonDetail: getPokemonDetail,
+    getPokemonTypes: getPokemonTypes,
+    getPokemonTypeDetail: getPokemonTypeDetail,
+    setFilterPokemonName: setFilterPokemonName,
+    setFilterPokemonType: setFilterPokemonType
 };
 
 const rootUrl = 'https://powerful-falls-18959.herokuapp.com/api';
 
-function setFilterPokemonName(name){
-    return {
-        type: 'SET_FILTER_POKEMON_NAME',
-        name
-    }
-}
-
 function getPokemons(){
     return (dispatch, getState) => {
 
-        var { pokemons } = getState();
-        var next = pokemons.next || rootUrl;
-        // Looking for offset 
-        var offset = next.match(/\?offset=[0-9]+/) || '';
+        var { next, pokemons } = getState();
 
-        axios.get(`${ rootUrl }/pokemon${ offset }`).then((newPokemons) => {
+        // Looking for offset 
+        var offset = next.match(/[0-9]+/g);
+        // Reg Exp above always return ['2', OFFSET_NUMBER]
+        // So I have to get the array index 1 element
+        // I don't know better RegExp to implement this
+        if (offset !== null) {
+            offset = offset[1];
+        }
+
+        axios.get(`${ rootUrl }/pokemon?offset=${ offset }`).then((newPokemons) => {
 
             dispatch(_setNextPokemons(newPokemons.data.next));
 
             newPokemons.data.results.forEach((newPokemon) => {
-                axios.get(`${ rootUrl }/pokemon/${ newPokemon.name }`).then((pokemon) => {
-
-                    dispatch(_setPokemon(pokemon.data));
-
-                }, (err) => {
-                    throw err;
-                });
+                // Only fetch if pokemon has not been fectched yet
+                if (!pokemons.find((fetchedPokemon) => (fetchedPokemon.name === newPokemon.name))) {
+                    axios.get(`${ rootUrl }/pokemon/${ newPokemon.name }`).then((pokemon) => {
+                        dispatch(_setPokemon(pokemon.data));
+                    });
+                }
             });
-        }, (err) => {
-            throw err;
         });
     }
 }
@@ -47,6 +46,50 @@ function getPokemonDetail(name) {
         axios.get(`${ rootUrl }/pokemon/${ name }`).then((pokemon) => {
             dispatch(_setPokemonDetail(pokemon.data));
         });
+    }
+}
+
+function getPokemonTypes(){
+    return (dispatch) => {
+        axios.get(`${ rootUrl }/type`).then((types) =>{
+            dispatch(_setPokemonTypes(types.data.results));
+        });
+    }
+}
+
+function getPokemonTypeDetail(typeName) {
+    return (dispatch, getState) => {
+
+        // Fetch specified type with its all pokemons
+        axios.get(`${ rootUrl }/type/${ typeName }`).then((type) => {
+
+            var { pokemons } = getState();
+
+            // Iterate over all pokemons in associated type
+            type.data.pokemon.forEach((pokemon) => {
+                
+                // Only fetch if pokemon has not been fectched yet
+                if(!pokemons.find((fetchedPokemon) => (fetchedPokemon.name === pokemon.pokemon.name))) {
+                    axios.get(`${ rootUrl }/pokemon/${ pokemon.pokemon.name }`).then((pokemon) => {
+                        dispatch(_setPokemon(pokemon.data));
+                    });
+                }
+            });
+        });
+    }
+}
+
+function setFilterPokemonName(name){
+    return {
+        type: 'SET_FILTER_POKEMON_NAME',
+        name
+    }
+}
+
+function setFilterPokemonType(_type) {
+    return {
+        type: 'SET_FILTER_POKEMON_TYPE',
+        _type
     }
 }
 
@@ -71,5 +114,12 @@ function _setPokemonDetail(pokemon) {
     return {
         type: 'SET_POKEMON_DETAIL',
         pokemon
+    }
+}
+
+function _setPokemonTypes(types) {
+    return {
+        type: 'SET_TYPES',
+        types
     }
 }

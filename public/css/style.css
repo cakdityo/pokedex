@@ -10,6 +10,8 @@
 
 #pokemon-search {
   padding: 20px; }
+  #pokemon-search button {
+    width: 100%; }
 
 .pokemon {
   cursor: pointer;
