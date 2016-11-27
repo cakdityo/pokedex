@@ -11,10 +11,6 @@
 #pokemon-search {
   padding: 20px; }
 
-#pokemon-list .row {
-  overflow-y: scroll;
-  max-height: 500px; }
-
 .pokemon {
   cursor: pointer;
   text-align: center;

@@ -5,140 +5,26 @@ var { getPokemons } = require('../actions');
 var Pokemon = require('./Pokemon');
 
 class PokemonList extends React.Component {
-
+    
     componentDidMount() {
         var { dispatch } = this.props;
 
         dispatch(getPokemons());
     }
 
+    filterPokemons(pokemons, filterName){
+        return pokemons.filter((pokemon) => {
+            return filterName.length === 0 || pokemon.name.indexOf(filterName) > -1;
+        });
+    }
+
     render() {
-        var { pokemons } = this.props;
-        // var fake = [
-        //     {
-        //         name: 'Pikachu',
-        //         sprites: {
-        //             front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/106.png'
-        //         }
-        //     },
-        //     {
-        //         name: 'Bulbasaur',
-        //         sprites: {
-        //             front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png'
-        //         }
-        //     },
-        //     {
-        //         name: 'Hitmonlee',
-        //         sprites: {
-        //             front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/106.png'
-        //         }
-        //     },
-        //     {
-        //         name: 'John Doe',
-        //         sprites: {
-        //             front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png'
-        //         }
-        //     },
-        //     {
-        //         name: 'Pikachu',
-        //         sprites: {
-        //             front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/106.png'
-        //         }
-        //     },
-        //     {
-        //         name: 'Bulbasaur',
-        //         sprites: {
-        //             front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png'
-        //         }
-        //     },
-        //     {
-        //         name: 'Hitmonlee',
-        //         sprites: {
-        //             front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/106.png'
-        //         }
-        //     },
-        //     {
-        //         name: 'John Doe',
-        //         sprites: {
-        //             front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png'
-        //         }
-        //     },
-        //     {
-        //         name: 'Pikachu',
-        //         sprites: {
-        //             front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/106.png'
-        //         }
-        //     },
-        //     {
-        //         name: 'Bulbasaur',
-        //         sprites: {
-        //             front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png'
-        //         }
-        //     },
-        //     {
-        //         name: 'Hitmonlee',
-        //         sprites: {
-        //             front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/106.png'
-        //         }
-        //     },
-        //     {
-        //         name: 'John Doe',
-        //         sprites: {
-        //             front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png'
-        //         }
-        //     },
-        //     {
-        //         name: 'Pikachu',
-        //         sprites: {
-        //             front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/106.png'
-        //         }
-        //     },
-        //     {
-        //         name: 'Bulbasaur',
-        //         sprites: {
-        //             front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png'
-        //         }
-        //     },
-        //     {
-        //         name: 'Hitmonlee',
-        //         sprites: {
-        //             front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/106.png'
-        //         }
-        //     },
-        //     {
-        //         name: 'John Doe',
-        //         sprites: {
-        //             front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png'
-        //         }
-        //     },
-        //     {
-        //         name: 'Pikachu',
-        //         sprites: {
-        //             front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/106.png'
-        //         }
-        //     },
-        //     {
-        //         name: 'Bulbasaur',
-        //         sprites: {
-        //             front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png'
-        //         }
-        //     },
-        //     {
-        //         name: 'Hitmonlee',
-        //         sprites: {
-        //             front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/106.png'
-        //         }
-        //     },
-        //     {
-        //         name: 'John Doe',
-        //         sprites: {
-        //             front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png'
-        //         }
-        //     }
-        // ];
+        var { pokemons, filter } = this.props;
+
+        var filteredPokemons = this.filterPokemons(pokemons.pokemons, filter.name);
 
         var renderPokemons = () => {
-            return pokemons.pokemons.map(
+            return filteredPokemons.map(
                 (pokemon, index) => {
                     return (
                         <div key={pokemon.id} className="col-sm-3">
@@ -162,7 +48,8 @@ class PokemonList extends React.Component {
 module.exports = connect(
     (state) => (
         {
-            pokemons: state.pokemons
+            pokemons: state.pokemons,
+            filter: state.pokemonFilter
         }
     )
 )(PokemonList);

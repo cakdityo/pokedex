@@ -1,6 +1,7 @@
 module.exports = {
     pokemonsReducer: pokemonsReducer,
-    pokemonDetailReducer: pokemonDetailReducer
+    pokemonDetailReducer: pokemonDetailReducer,
+    pokemonFilterReducer: pokemonFilterReducer
 }
 
 function pokemonsReducer(state={ pokemons: [], next: ''}, action) {
@@ -32,6 +33,15 @@ function pokemonDetailReducer(state=setDefaultPokemonDetail(), action) {
             return state;
     }
 
+}
+
+function pokemonFilterReducer(state={ name: '', type: '' }, action) {
+    switch(action.type) {
+        case 'SET_FILTER_POKEMON_NAME':
+            return Object.assign({}, state, { name: action.name });
+        default:
+            return state;
+    }
 }
 
 function setDefaultPokemonDetail(){

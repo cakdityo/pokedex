@@ -1,6 +1,7 @@
 var React = require('react');
 
 var Navbar = require('./Navbar');
+var PokemonFilter = require('./PokemonFilter');
 var PokemonList = require('./PokemonList');
 
 class AppRoot extends React.Component {
@@ -10,13 +11,8 @@ class AppRoot extends React.Component {
                 <Navbar />
                 <div className="container">
                     <div className="row">
-                        <div className="col-sm-6">
-                            { this.props.children }
-                        </div>
-                        <div className="col-sm-6">
-                            <div className="row" id="pokemon-search">
-                                <input type="search" className="form-control" placeholder="Filter pokemon by name"/>
-                            </div>
+                        <div className=" col-sm-offset-3 col-sm-6">
+                            <PokemonFilter />
                             <PokemonList />
                         </div>
                     </div>

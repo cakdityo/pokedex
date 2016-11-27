@@ -1,11 +1,19 @@
 var axios = require('axios');
 
 module.exports = {
+    setFilterPokemonName: setFilterPokemonName,
     getPokemons: getPokemons,
     getPokemonDetail: getPokemonDetail
 };
 
 const rootUrl = 'https://powerful-falls-18959.herokuapp.com/api';
+
+function setFilterPokemonName(name){
+    return {
+        type: 'SET_FILTER_POKEMON_NAME',
+        name
+    }
+}
 
 function getPokemons(){
     return (dispatch, getState) => {

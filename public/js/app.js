@@ -51,14 +51,16 @@ webpackJsonp([0],{
 
 	var _require = __webpack_require__(263),
 	    pokemonsReducer = _require.pokemonsReducer,
-	    pokemonDetailReducer = _require.pokemonDetailReducer;
+	    pokemonDetailReducer = _require.pokemonDetailReducer,
+	    pokemonFilterReducer = _require.pokemonFilterReducer;
 
 	module.exports = function () {
 	    var initialState = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
 	    var reducer = redux.combineReducers({
 	        pokemons: pokemonsReducer,
-	        pokemonDetail: pokemonDetailReducer
+	        pokemonDetail: pokemonDetailReducer,
+	        pokemonFilter: pokemonFilterReducer
 	    });
 
 	    var store = redux.createStore(reducer, initialState,
@@ -79,7 +81,8 @@ webpackJsonp([0],{
 
 	module.exports = {
 	    pokemonsReducer: pokemonsReducer,
-	    pokemonDetailReducer: pokemonDetailReducer
+	    pokemonDetailReducer: pokemonDetailReducer,
+	    pokemonFilterReducer: pokemonFilterReducer
 	};
 
 	function pokemonsReducer() {
@@ -114,6 +117,18 @@ webpackJsonp([0],{
 	    }
 	}
 
+	function pokemonFilterReducer() {
+	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { name: '', type: '' };
+	    var action = arguments[1];
+
+	    switch (action.type) {
+	        case 'SET_FILTER_POKEMON_NAME':
+	            return Object.assign({}, state, { name: action.name });
+	        default:
+	            return state;
+	    }
+	}
+
 	function setDefaultPokemonDetail() {
 	    return {
 	        name: '',
@@ -142,6 +157,7 @@ webpackJsonp([0],{
 	var React = __webpack_require__(1);
 
 	var Navbar = __webpack_require__(265);
+	var PokemonFilter = __webpack_require__(309);
 	var PokemonList = __webpack_require__(266);
 
 	var AppRoot = function (_React$Component) {
@@ -168,17 +184,8 @@ webpackJsonp([0],{
 	                        { className: 'row' },
 	                        React.createElement(
 	                            'div',
-	                            { className: 'col-sm-6' },
-	                            this.props.children
-	                        ),
-	                        React.createElement(
-	                            'div',
-	                            { className: 'col-sm-6' },
-	                            React.createElement(
-	                                'div',
-	                                { className: 'row', id: 'pokemon-search' },
-	                                React.createElement('input', { type: 'search', className: 'form-control', placeholder: 'Filter pokemon by name' })
-	                            ),
+	                            { className: ' col-sm-offset-3 col-sm-6' },
+	                            React.createElement(PokemonFilter, null),
 	                            React.createElement(PokemonList, null)
 	                        )
 	                    )
@@ -289,134 +296,24 @@ webpackJsonp([0],{
 	            dispatch(getPokemons());
 	        }
 	    }, {
+	        key: 'filterPokemons',
+	        value: function filterPokemons(pokemons, filterName) {
+	            return pokemons.filter(function (pokemon) {
+	                return filterName.length === 0 || pokemon.name.indexOf(filterName) > -1;
+	            });
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
-	            var pokemons = this.props.pokemons;
-	            // var fake = [
-	            //     {
-	            //         name: 'Pikachu',
-	            //         sprites: {
-	            //             front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/106.png'
-	            //         }
-	            //     },
-	            //     {
-	            //         name: 'Bulbasaur',
-	            //         sprites: {
-	            //             front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png'
-	            //         }
-	            //     },
-	            //     {
-	            //         name: 'Hitmonlee',
-	            //         sprites: {
-	            //             front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/106.png'
-	            //         }
-	            //     },
-	            //     {
-	            //         name: 'John Doe',
-	            //         sprites: {
-	            //             front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png'
-	            //         }
-	            //     },
-	            //     {
-	            //         name: 'Pikachu',
-	            //         sprites: {
-	            //             front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/106.png'
-	            //         }
-	            //     },
-	            //     {
-	            //         name: 'Bulbasaur',
-	            //         sprites: {
-	            //             front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png'
-	            //         }
-	            //     },
-	            //     {
-	            //         name: 'Hitmonlee',
-	            //         sprites: {
-	            //             front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/106.png'
-	            //         }
-	            //     },
-	            //     {
-	            //         name: 'John Doe',
-	            //         sprites: {
-	            //             front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png'
-	            //         }
-	            //     },
-	            //     {
-	            //         name: 'Pikachu',
-	            //         sprites: {
-	            //             front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/106.png'
-	            //         }
-	            //     },
-	            //     {
-	            //         name: 'Bulbasaur',
-	            //         sprites: {
-	            //             front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png'
-	            //         }
-	            //     },
-	            //     {
-	            //         name: 'Hitmonlee',
-	            //         sprites: {
-	            //             front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/106.png'
-	            //         }
-	            //     },
-	            //     {
-	            //         name: 'John Doe',
-	            //         sprites: {
-	            //             front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png'
-	            //         }
-	            //     },
-	            //     {
-	            //         name: 'Pikachu',
-	            //         sprites: {
-	            //             front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/106.png'
-	            //         }
-	            //     },
-	            //     {
-	            //         name: 'Bulbasaur',
-	            //         sprites: {
-	            //             front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png'
-	            //         }
-	            //     },
-	            //     {
-	            //         name: 'Hitmonlee',
-	            //         sprites: {
-	            //             front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/106.png'
-	            //         }
-	            //     },
-	            //     {
-	            //         name: 'John Doe',
-	            //         sprites: {
-	            //             front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png'
-	            //         }
-	            //     },
-	            //     {
-	            //         name: 'Pikachu',
-	            //         sprites: {
-	            //             front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/106.png'
-	            //         }
-	            //     },
-	            //     {
-	            //         name: 'Bulbasaur',
-	            //         sprites: {
-	            //             front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png'
-	            //         }
-	            //     },
-	            //     {
-	            //         name: 'Hitmonlee',
-	            //         sprites: {
-	            //             front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/106.png'
-	            //         }
-	            //     },
-	            //     {
-	            //         name: 'John Doe',
-	            //         sprites: {
-	            //             front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png'
-	            //         }
-	            //     }
-	            // ];
+	            var _props = this.props,
+	                pokemons = _props.pokemons,
+	                filter = _props.filter;
+
+
+	            var filteredPokemons = this.filterPokemons(pokemons.pokemons, filter.name);
 
 	            var renderPokemons = function renderPokemons() {
-	                return pokemons.pokemons.map(function (pokemon, index) {
+	                return filteredPokemons.map(function (pokemon, index) {
 	                    return React.createElement(
 	                        'div',
 	                        { key: pokemon.id, className: 'col-sm-3' },
@@ -442,7 +339,8 @@ webpackJsonp([0],{
 
 	module.exports = connect(function (state) {
 	    return {
-	        pokemons: state.pokemons
+	        pokemons: state.pokemons,
+	        filter: state.pokemonFilter
 	    };
 	})(PokemonList);
 
@@ -456,11 +354,19 @@ webpackJsonp([0],{
 	var axios = __webpack_require__(268);
 
 	module.exports = {
+	    setFilterPokemonName: setFilterPokemonName,
 	    getPokemons: getPokemons,
 	    getPokemonDetail: getPokemonDetail
 	};
 
 	var rootUrl = 'https://powerful-falls-18959.herokuapp.com/api';
+
+	function setFilterPokemonName(name) {
+	    return {
+	        type: 'SET_FILTER_POKEMON_NAME',
+	        name: name
+	    };
+	}
 
 	function getPokemons() {
 	    return function (dispatch, getState) {
@@ -706,6 +612,69 @@ webpackJsonp([0],{
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
+
+/***/ },
+
+/***/ 309:
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var React = __webpack_require__(1);
+
+	var _require = __webpack_require__(233),
+	    connect = _require.connect;
+
+	var _require2 = __webpack_require__(267),
+	    setFilterPokemonName = _require2.setFilterPokemonName;
+
+	var PokemonFilter = function (_React$Component) {
+	    _inherits(PokemonFilter, _React$Component);
+
+	    function PokemonFilter() {
+	        _classCallCheck(this, PokemonFilter);
+
+	        var _this = _possibleConstructorReturn(this, (PokemonFilter.__proto__ || Object.getPrototypeOf(PokemonFilter)).call(this));
+
+	        _this.filterByName = _this.filterByName.bind(_this);
+	        return _this;
+	    }
+
+	    _createClass(PokemonFilter, [{
+	        key: 'filterByName',
+	        value: function filterByName() {
+	            var dispatch = this.props.dispatch;
+
+	            var name = this.filter.value;
+	            dispatch(setFilterPokemonName(name));
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            var _this2 = this;
+
+	            return React.createElement(
+	                'div',
+	                { className: 'row', id: 'pokemon-search' },
+	                React.createElement('input', { onChange: this.filterByName, ref: function ref(filter) {
+	                        return _this2.filter = filter;
+	                    }, type: 'text', className: 'form-control', placeholder: 'Filter pokemon by name' })
+	            );
+	        }
+	    }]);
+
+	    return PokemonFilter;
+	}(React.Component);
+
+	module.exports = connect()(PokemonFilter);
 
 /***/ }
 
