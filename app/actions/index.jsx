@@ -5,17 +5,22 @@ module.exports = {
     getPokemonDetail: getPokemonDetail
 };
 
+const rootUrl = 'https://powerful-falls-18959.herokuapp.com/api';
+
 function getPokemons(){
     return (dispatch, getState) => {
 
         var { pokemons } = getState();
+        var next = pokemons.next || rootUrl;
+        // Looking for offset 
+        var offset = next.match(/\?offset=[0-9]+/) || '';
 
-        axios.get(`/api/pokemons?next=${ pokemons.next }`).then((newPokemons) => {
+        axios.get(`${ rootUrl }/pokemon${ offset }`).then((newPokemons) => {
 
             dispatch(_setNextPokemons(newPokemons.data.next));
 
             newPokemons.data.results.forEach((newPokemon) => {
-                axios.get(`/api/pokemon?name=${ newPokemon.name }`).then((pokemon) => {
+                axios.get(`${ rootUrl }/pokemon/${ newPokemon.name }`).then((pokemon) => {
 
                     dispatch(_setPokemon(pokemon.data));
 
@@ -31,7 +36,7 @@ function getPokemons(){
 
 function getPokemonDetail(name) {
     return (dispatch) => {
-        axios.get(`/api/pokemon?name=${ name }`).then((pokemon) => {
+        axios.get(`${ rootUrl }/pokemon/${ name }`).then((pokemon) => {
             dispatch(_setPokemonDetail(pokemon.data));
         });
     }

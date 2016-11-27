@@ -3,26 +3,48 @@ var app = express();
 var axios = require('axios');
 
 const PORT = process.env.PORT || 3000;
+const rootUrl = 'https://pokeapi.co/api/v2';
 
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
+
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 
 app.get('/', (req, res) => {
     res.render('index');
 });
 
-app.get('/api/pokemons', (req, res) => {
-    axios.get(req.query.next).then((pokemons) => {
+app.get('/api/pokemon', (req, res) => {
+    axios.get(`${ rootUrl }/pokemon?offset=${ req.query.offset }`).then((pokemons) => {
         res.json(pokemons.data);
     }, (err) => {
         throw err;
     });
 });
 
-app.get('/api/pokemon', (req, res) => {
-    let url = `https://pokeapi.co/api/v2/pokemon/${ req.query.name }`;
-    axios.get(url).then((pokemon) => {
+app.get('/api/pokemon/:name', (req, res) => {
+    axios.get(`${ rootUrl }/pokemon/${ req.params.name }`).then((pokemon) => {
         res.json(pokemon.data);
+    }, (err) => {
+        throw err;
+    });
+});
+
+app.get('/api/type', (req, res) => {
+    axios.get(`${ rootUrl }/type`).then((types) => {
+        res.json(types);
+    }, (err) => {
+        throw err;
+    });
+});
+
+app.get('/api/type/:id', (req, res) => {
+    axios.get(`${ rootUrl }/type/${ req.params.id }`).then((type) => {
+        res.json(type.data);
     }, (err) => {
         throw err;
     });

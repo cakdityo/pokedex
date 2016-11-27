@@ -19,11 +19,11 @@ webpackJsonp([0],{
 
 	window.store = __webpack_require__(261)();
 	var AppRoot = __webpack_require__(264);
-	var PokemonList = __webpack_require__(291);
-	var PokemonDetail = __webpack_require__(332);
+	var PokemonList = __webpack_require__(266);
+	var PokemonDetail = __webpack_require__(294);
 
-	__webpack_require__(319);
-	__webpack_require__(321);
+	__webpack_require__(295);
+	__webpack_require__(297);
 
 	ReactDOM.render(React.createElement(
 	    Provider,
@@ -83,7 +83,7 @@ webpackJsonp([0],{
 	};
 
 	function pokemonsReducer() {
-	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { pokemons: [], next: 'https://pokeapi.co/api/v2/pokemon' };
+	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { pokemons: [], next: '' };
 	    var action = arguments[1];
 
 
@@ -142,7 +142,7 @@ webpackJsonp([0],{
 	var React = __webpack_require__(1);
 
 	var Navbar = __webpack_require__(265);
-	var PokemonList = __webpack_require__(291);
+	var PokemonList = __webpack_require__(266);
 
 	var AppRoot = function (_React$Component) {
 	    _inherits(AppRoot, _React$Component);
@@ -248,7 +248,7 @@ webpackJsonp([0],{
 
 /***/ },
 
-/***/ 291:
+/***/ 266:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -266,10 +266,10 @@ webpackJsonp([0],{
 	var _require = __webpack_require__(233),
 	    connect = _require.connect;
 
-	var _require2 = __webpack_require__(292),
+	var _require2 = __webpack_require__(267),
 	    getPokemons = _require2.getPokemons;
 
-	var Pokemon = __webpack_require__(318);
+	var Pokemon = __webpack_require__(293);
 
 	var PokemonList = function (_React$Component) {
 	    _inherits(PokemonList, _React$Component);
@@ -448,29 +448,35 @@ webpackJsonp([0],{
 
 /***/ },
 
-/***/ 292:
+/***/ 267:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var axios = __webpack_require__(293);
+	var axios = __webpack_require__(268);
 
 	module.exports = {
 	    getPokemons: getPokemons,
 	    getPokemonDetail: getPokemonDetail
 	};
 
+	var rootUrl = 'https://powerful-falls-18959.herokuapp.com/api';
+
 	function getPokemons() {
 	    return function (dispatch, getState) {
 	        var _getState = getState(),
 	            pokemons = _getState.pokemons;
 
-	        axios.get('/api/pokemons?next=' + pokemons.next).then(function (newPokemons) {
+	        var next = pokemons.next || rootUrl;
+	        // Looking for offset 
+	        var offset = next.match(/\?offset=[0-9]+/) || '';
+
+	        axios.get(rootUrl + '/pokemon' + offset).then(function (newPokemons) {
 
 	            dispatch(_setNextPokemons(newPokemons.data.next));
 
 	            newPokemons.data.results.forEach(function (newPokemon) {
-	                axios.get('/api/pokemon?name=' + newPokemon.name).then(function (pokemon) {
+	                axios.get(rootUrl + '/pokemon/' + newPokemon.name).then(function (pokemon) {
 
 	                    dispatch(_setPokemon(pokemon.data));
 	                }, function (err) {
@@ -485,7 +491,7 @@ webpackJsonp([0],{
 
 	function getPokemonDetail(name) {
 	    return function (dispatch) {
-	        axios.get('/api/pokemon?name=' + name).then(function (pokemon) {
+	        axios.get(rootUrl + '/pokemon/' + name).then(function (pokemon) {
 	            dispatch(_setPokemonDetail(pokemon.data));
 	        });
 	    };
@@ -517,7 +523,7 @@ webpackJsonp([0],{
 
 /***/ },
 
-/***/ 318:
+/***/ 293:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -575,38 +581,7 @@ webpackJsonp([0],{
 
 /***/ },
 
-/***/ 319:
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function($) {'use strict';
-
-	var _require = __webpack_require__(292),
-	    getPokemons = _require.getPokemons;
-
-	// ============ Performing infinite scroll ================
-	// Add event listener for scrolling page
-	// App will fetch another 20 pokemons imediately when user scroll the bottom of the page
-
-	$(document).ready(function () {
-	    $(window).scroll(function () {
-	        // It only happens when touch the bottom of the page
-	        if ($(window).scrollTop() + $(window).height() === $(document).height()) {
-	            window.store.dispatch(getPokemons());
-	        }
-	    });
-	});
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(320)))
-
-/***/ },
-
-/***/ 321:
-/***/ function(module, exports) {
-
-	// removed by extract-text-webpack-plugin
-
-/***/ },
-
-/***/ 332:
+/***/ 294:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -624,7 +599,7 @@ webpackJsonp([0],{
 	var _require = __webpack_require__(233),
 	    connect = _require.connect;
 
-	var _require2 = __webpack_require__(292),
+	var _require2 = __webpack_require__(267),
 	    getPokemonDetail = _require2.getPokemonDetail;
 
 	var PokemonDetail = function (_React$Component) {
@@ -700,6 +675,37 @@ webpackJsonp([0],{
 	        pokemon: state.pokemonDetail
 	    };
 	})(PokemonDetail);
+
+/***/ },
+
+/***/ 295:
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function($) {'use strict';
+
+	var _require = __webpack_require__(267),
+	    getPokemons = _require.getPokemons;
+
+	// ============ Performing infinite scroll ================
+	// Add event listener for scrolling page
+	// App will fetch another 20 pokemons imediately when user scroll the bottom of the page
+
+	$(document).ready(function () {
+	    $(window).scroll(function () {
+	        // It only happens when touch the bottom of the page
+	        if ($(window).scrollTop() + $(window).height() === $(document).height()) {
+	            window.store.dispatch(getPokemons());
+	        }
+	    });
+	});
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(296)))
+
+/***/ },
+
+/***/ 297:
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
 
 /***/ }
 

@@ -3,7 +3,7 @@ module.exports = {
     pokemonDetailReducer: pokemonDetailReducer
 }
 
-function pokemonsReducer(state={ pokemons: [], next: 'https://pokeapi.co/api/v2/pokemon'}, action) {
+function pokemonsReducer(state={ pokemons: [], next: ''}, action) {
 
     switch(action.type) {
         case 'SET_POKEMON':
